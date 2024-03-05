@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
         ]);
 
+        \App\Models\User::factory(30)->create();
+
 
         // $this->call([
         //     CustomerSeeder::class,

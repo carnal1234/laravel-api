@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,7 +30,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 //api/v1/
-Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'middleware' => ['api','auth:sanctum']], function(){
+Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'middleware' => 'auth:sanctum'], function(){
 
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('invoices', InvoiceController::class);
