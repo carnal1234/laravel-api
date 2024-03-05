@@ -2,14 +2,33 @@ import {useEffect, useState} from "react";
 import axiosClient from "../axios-client.js";
 import {Link} from "react-router-dom";
 import {useStateContext} from "../context/ContextProvider.jsx";
+// import { useLocation } from 'react-router-dom';
+
+import { useSearchParams } from "react-router-dom";
+
+
+
+
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [paginatedLinks, setPaginatedLinks] = useState({});
   const [loading, setLoading] = useState(false);
+
+  
+
+  
+
+
+
+  const config = {      
+    baseURL: import.meta.env.VITE_FRONTEND_BASE_URL,
+  }
+
   const {setNotification} = useStateContext()
 
   useEffect(() => {
-    getUsers();
+    getUsers("/users");
   }, [])
 
   const onDeleteClick = user => {
@@ -23,23 +42,63 @@ export default function Users() {
       })
   }
 
-  const getUsers = () => {
+  const generatePageLink = (pageNumber)=>{
+    return `${config.baseURL}/users?page=${pageNumber}`
+  };
+
+  const getUsers = (url) => {
+
+    if(!url) return;
+
     setLoading(true)
-    axiosClient.get('/users')
+    // let pageNumber = searchParams.get('page');
+    // pageNumber = pageNumber ? parseInt(pageNumber): null;
+    // let targetURL = pageNumber ? `/users?page=${pageNumber}` : '/users'
+    // console.log("Fetch", targetURL)
+    axiosClient.get(url)
       .then(({ data }) => {
+        // console.log("user data" ,data)
+
+        
         setLoading(false)
         setUsers(data.data)
+        setPaginatedLinks(data.links)
+        // console.log(data.links, paginatedLinks)
+        // setPaginatedLinks({
+        //   prev: pageNumber > 1 ? generatePageLink(pageNumber - 1): null,
+        //   current: generatePageLink(pageNumber),
+        //   next: generatePageLink(pageNumber + 1)
+        // })
+
+        // let baseUrl = `${import.meta.env.VITE_FRONTEND_BASE_URL}/api`
+
+       
+        
+
+        
       })
       .catch(() => {
         setLoading(false)
       })
   }
 
+  const HandlePreviousPage = () => {
+   
+    
+    getUsers(paginatedLinks.prev);
+  }
+  const HandleNextPage = () => {
+   
+    getUsers(paginatedLinks.next);
+  }
+
   return (
     <div>
       <div style={{display: 'flex', justifyContent: "space-between", alignItems: "center"}}>
         <h1>Users</h1>
+        {paginatedLinks.prev ? <button className="btn-add" onClick={HandlePreviousPage}>Previous</button> : null }
         <Link className="btn-add" to="/users/new">Add new</Link>
+        {paginatedLinks.next ? <button className="btn-add"  onClick={HandleNextPage}>Next</button>  : null }
       </div>
       <div className="card animated fadeInDown">
         <table>

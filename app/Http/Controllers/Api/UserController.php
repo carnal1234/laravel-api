@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+
+use App\Filters\V1\UserFilter;
 
 class UserController extends Controller
 {
@@ -15,9 +20,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return UserResource::collection(User::query()->orderBy('id', 'desc')->paginate(10));
+        // $filter = new UserFilter();
+        // $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
+        // $users = User::where($filterItems);
+
+
+        return UserResource::collection(User::query()->orderBy('id', 'desc')->paginate(10)->appends($request->query()));
     }
 
     /**
