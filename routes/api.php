@@ -19,13 +19,25 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('cors')->group(function(){
+//     Route::get('/test', function(Request $request){
+//         return $request;
+//     } );
+// });
+
+// Route::get('/test', function(Request $request){
+//     return $request;
+// } );
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
     Route::apiResource('/users', UserController::class);
+    
 });
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
