@@ -1,13 +1,16 @@
-import axios from "axios";
+// import {axios} from "https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js";
 import {useStateContext} from "./context/ContextProvider.jsx";
 
 const axiosClient = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
+  
 })
 
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('ACCESS_TOKEN');
-  config.headers.Authorization = `Bearer ${token}`
+  config.headers = {...config.headers, 
+    "Authorization" :`Bearer ${token}`, "Access-Control-Allow-Origin" : "*"}
+
   return config;
 })
 

@@ -48,33 +48,20 @@ export default function Users() {
 
   const getUsers = (url) => {
 
-    if(!url) return;
+    if(!url){
+      return;
+    }
 
     setLoading(true)
-    // let pageNumber = searchParams.get('page');
-    // pageNumber = pageNumber ? parseInt(pageNumber): null;
-    // let targetURL = pageNumber ? `/users?page=${pageNumber}` : '/users'
-    // console.log("Fetch", targetURL)
+    
     axiosClient.get(url)
       .then(({ data }) => {
-        // console.log("user data" ,data)
+        console.log("user data" ,data)
 
         
         setLoading(false)
         setUsers(data.data)
         setPaginatedLinks(data.links)
-        // console.log(data.links, paginatedLinks)
-        // setPaginatedLinks({
-        //   prev: pageNumber > 1 ? generatePageLink(pageNumber - 1): null,
-        //   current: generatePageLink(pageNumber),
-        //   next: generatePageLink(pageNumber + 1)
-        // })
-
-        // let baseUrl = `${import.meta.env.VITE_FRONTEND_BASE_URL}/api`
-
-       
-        
-
         
       })
       .catch(() => {
