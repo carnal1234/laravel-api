@@ -5,8 +5,10 @@ import GuestLayout from "./components/GuestLayout";
 import Login from "./views/Login";
 import NotFound from "./views/NotFound";
 import Signup from "./views/Signup";
-import Users from "./views/Users";
-import UserForm from "./views/UserForm";
+
+
+import Customers from "./views/Customers";
+import CustomerForm from "./views/CustomerForm.jsx"; 
 
 const router = createBrowserRouter([
   {
@@ -15,23 +17,23 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Navigate to="/users"/>
+        element: <Navigate to="/customers"/>
       },
       {
         path: '/dashboard',
         element: <Dashboard/>
       },
       {
-        path: '/users',
-        element: <Users/>
+        path: '/customers',
+        element: <Customers/>
       },
       {
-        path: '/users/new',
-        element: <UserForm key="userCreate" />
+        path: '/customers/new',
+        element: <CustomerForm key="customerCreate" />
       },
       {
-        path: '/users/:id',
-        element: <UserForm key="userUpdate" />
+        path: '/customers/:id',
+        element: <CustomerForm key="customerUpdate" />
       }
     ]
   },

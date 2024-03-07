@@ -2,16 +2,13 @@ import {useEffect, useState} from "react";
 import axiosClient from "../axios-client.js";
 import {Link} from "react-router-dom";
 import {useStateContext} from "../context/ContextProvider.jsx";
-// import { useLocation } from 'react-router-dom';
-
-import { useSearchParams } from "react-router-dom";
 
 
 
 
 
-export default function Users() {
-  const [users, setUsers] = useState([]);
+export default function Customers() {
+  const [customers, setCustomers] = useState([]);
   const [paginatedLinks, setPaginatedLinks] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -28,25 +25,21 @@ export default function Users() {
   const {setNotification} = useStateContext()
 
   useEffect(() => {
-    getUsers("/users");
+    getCustomers("v1/customers");
   }, [])
 
-  const onDeleteClick = user => {
+  const onDeleteClick = customer => {
     if (!window.confirm("Are you sure you want to delete this user?")) {
       return
     }
-    axiosClient.delete(`/users/${user.id}`)
+    axiosClient.delete(`v1/customers/${customer.id}`)
       .then(() => {
-        setNotification('User was successfully deleted')
-        getUsers()
+        setNotification('Customer was successfully deleted')
+        getCustomers()
       })
   }
 
-  const generatePageLink = (pageNumber)=>{
-    return `${config.baseURL}/users?page=${pageNumber}`
-  };
-
-  const getUsers = (url) => {
+  const getCustomers = (url) => {
 
     if(!url){
       return;
@@ -60,7 +53,7 @@ export default function Users() {
 
         
         setLoading(false)
-        setUsers(data.data)
+        setCustomers(data.data)
         setPaginatedLinks(data.links)
         
       })
@@ -72,19 +65,19 @@ export default function Users() {
   const HandlePreviousPage = () => {
    
     
-    getUsers(paginatedLinks.prev);
+    getCustomers(paginatedLinks.prev);
   }
   const HandleNextPage = () => {
    
-    getUsers(paginatedLinks.next);
+    getCustomers(paginatedLinks.next);
   }
 
   return (
     <div>
       <div style={{display: 'flex', justifyContent: "space-between", alignItems: "center"}}>
-        <h1>Users</h1>
+        <h1>Customers</h1>
         {paginatedLinks.prev ? <button className="btn-add" onClick={HandlePreviousPage}>Previous</button> : null }
-        <Link className="btn-add" to="/users/new">Add new</Link>
+        <Link className="btn-add" to="/customers/new">Add new</Link>
         {paginatedLinks.next ? <button className="btn-add"  onClick={HandleNextPage}>Next</button>  : null }
       </div>
       <div className="card animated fadeInDown">
@@ -93,8 +86,13 @@ export default function Users() {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Type</th>
             <th>Email</th>
-            <th>Create Date</th>
+            {/* <th>address</th>
+            <th>city</th> */}
+            <th>State</th>
+            {/* <th>postalCode</th> */}
+            {/* <th>Create Date</th> */}
             <th>Actions</th>
           </tr>
           </thead>
@@ -109,16 +107,21 @@ export default function Users() {
           }
           {!loading &&
             <tbody>
-            {users.map(u => (
-              <tr key={u.id}>
-                <td>{u.id}</td>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td>{u.created_at}</td>
+            {customers.map(customer => (
+              <tr key={customer.id}>
+                <td>{customer.id}</td>
+                <td>{customer.name}</td>
+                <td>{customer.type === "I" ? "Normal" : "Business"}</td>
+                <td>{customer.email}</td>
+                {/* <td>{customer.address}</td>
+                <td>{customer.city}</td> */}
+                <td>{customer.state}</td>
+                {/* <td>{customer.postalCode}</td> */}
+                {/* <td>{u.created_at}</td> */}
                 <td>
-                  <Link className="btn-edit" to={'/users/' + u.id}>Edit</Link>
+                  <Link className="btn-edit" to={'/customers/' + customer.id}>Edit</Link>
                   &nbsp;
-                  <button className="btn-delete" onClick={ev => onDeleteClick(u)}>Delete</button>
+                  <button className="btn-delete" onClick={ev => onDeleteClick(customer)}>Delete</button>
                 </td>
               </tr>
             ))}

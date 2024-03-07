@@ -29,12 +29,14 @@ class CustomerController extends Controller
     {
         $filter = new CustomerFilter();
         $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
+
+        // dd($filterItems);
         $includeInvoices = $request->query('includeInvoices');
         $customers = Customer::where($filterItems);
         if($includeInvoices){
             $customers = $customers->with('invoices');
         }
-        return new CustomerCollection($customers->paginate()->appends($request->query())); 
+        return new CustomerCollection($customers->orderBy('id', 'desc')->paginate()->appends($request->query())); 
     }
 
     
