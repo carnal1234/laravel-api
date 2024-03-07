@@ -18,24 +18,26 @@ export default function Customers() {
 
 
 
-  const config = {      
+  const CONFIG = {      
     baseURL: import.meta.env.VITE_FRONTEND_BASE_URL,
+    fetchCustomerURL: "v1/customers"
+
   }
 
   const {setNotification} = useStateContext()
 
   useEffect(() => {
-    getCustomers("v1/customers");
+    getCustomers(CONFIG.fetchCustomerURL);
   }, [])
 
   const onDeleteClick = customer => {
     if (!window.confirm("Are you sure you want to delete this user?")) {
       return
     }
-    axiosClient.delete(`v1/customers/${customer.id}`)
+    axiosClient.delete(`${CONFIG.fetchCustomerURL}/${customer.id}`)
       .then(() => {
         setNotification('Customer was successfully deleted')
-        getCustomers()
+        getCustomers(CONFIG.fetchCustomerURL);
       })
   }
 
