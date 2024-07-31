@@ -1,6 +1,5 @@
 
-# Project Title
-
+# Laravel RESTFul API
 
 
 This project is about building REST API with Laravel as Backend and React as FrontEnd.
