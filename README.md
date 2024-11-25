@@ -110,9 +110,5 @@ php artisan serve
 
 
 
-## Demo
 
-[Here](https://carnel1234.dev) is the project deployed on server.
-
-You need to create a simple account to get access to the dashboard.
 
